@@ -1,3 +1,4 @@
+My Drive
 /*
  * Copyright IBM Corp. All Rights Reserved.
  *
@@ -75,15 +76,19 @@ class AssetTransfer extends Contract {
         if (exists) {
             throw new Error(`The asset ${id} already exists`);
         }
-
+        // Retrieve the peer.rank from the ctx
+        let rank  = ctx.clientIdentity.getAttributeValue('rank')
+        console.log("Rank = "+ rank)
         const asset = {
             ID: id,
             Color: color,
             Size: size,
             Owner: owner,
             AppraisedValue: appraisedValue,
+            rank: rank
         };
         //we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
+        
         await ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
         return JSON.stringify(asset);
     }
@@ -105,12 +110,17 @@ class AssetTransfer extends Contract {
         }
 
         // overwriting original asset with new asset
+        // Retrieve the peer.rank from the ctx
+        
+        let rank  = ctx.clientIdentity.getAttributeValue('rank')
+        console.log("Rank = "+ rank)
         const updatedAsset = {
             ID: id,
             Color: color,
             Size: size,
             Owner: owner,
             AppraisedValue: appraisedValue,
+            rank: rank
         };
         // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(updatedAsset))));
