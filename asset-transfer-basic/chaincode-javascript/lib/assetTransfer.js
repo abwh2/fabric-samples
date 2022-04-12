@@ -1,4 +1,3 @@
-My Drive
 /*
  * Copyright IBM Corp. All Rights Reserved.
  *
@@ -7,7 +6,6 @@ My Drive
 
 'use strict';
 
-// Deterministic JSON.stringify()
 const stringify  = require('json-stringify-deterministic');
 const sortKeysRecursive  = require('sort-keys-recursive');
 const { Contract } = require('fabric-contract-api');
@@ -15,6 +13,9 @@ const { Contract } = require('fabric-contract-api');
 class AssetTransfer extends Contract {
 
     async InitLedger(ctx) {
+        // Retrieve the client rank from the ctx
+        let rank  = ctx.clientIdentity.getAttributeValue('rank')
+        console.log("Rank = "+ rank)
         const assets = [
             {
                 ID: 'asset1',
@@ -22,6 +23,7 @@ class AssetTransfer extends Contract {
                 Size: 5,
                 Owner: 'Tomoko',
                 AppraisedValue: 300,
+                Rank: rank
             },
             {
                 ID: 'asset2',
@@ -29,6 +31,7 @@ class AssetTransfer extends Contract {
                 Size: 5,
                 Owner: 'Brad',
                 AppraisedValue: 400,
+                Rank: rank
             },
             {
                 ID: 'asset3',
@@ -36,6 +39,7 @@ class AssetTransfer extends Contract {
                 Size: 10,
                 Owner: 'Jin Soo',
                 AppraisedValue: 500,
+                Rank: rank
             },
             {
                 ID: 'asset4',
@@ -43,6 +47,7 @@ class AssetTransfer extends Contract {
                 Size: 10,
                 Owner: 'Max',
                 AppraisedValue: 600,
+                Rank: rank
             },
             {
                 ID: 'asset5',
@@ -50,6 +55,7 @@ class AssetTransfer extends Contract {
                 Size: 15,
                 Owner: 'Adriana',
                 AppraisedValue: 700,
+                Rank: rank
             },
             {
                 ID: 'asset6',
@@ -57,6 +63,7 @@ class AssetTransfer extends Contract {
                 Size: 15,
                 Owner: 'Michel',
                 AppraisedValue: 800,
+                Rank: rank
             },
         ];
 
@@ -76,7 +83,7 @@ class AssetTransfer extends Contract {
         if (exists) {
             throw new Error(`The asset ${id} already exists`);
         }
-        // Retrieve the peer.rank from the ctx
+        // Retrieve the client rank from the ctx
         let rank  = ctx.clientIdentity.getAttributeValue('rank')
         console.log("Rank = "+ rank)
         const asset = {
@@ -85,7 +92,7 @@ class AssetTransfer extends Contract {
             Size: size,
             Owner: owner,
             AppraisedValue: appraisedValue,
-            rank: rank
+            Rank: rank
         };
         //we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         
@@ -110,8 +117,7 @@ class AssetTransfer extends Contract {
         }
 
         // overwriting original asset with new asset
-        // Retrieve the peer.rank from the ctx
-        
+        // Retrieve the client rank from the ctx        
         let rank  = ctx.clientIdentity.getAttributeValue('rank')
         console.log("Rank = "+ rank)
         const updatedAsset = {
@@ -120,7 +126,7 @@ class AssetTransfer extends Contract {
             Size: size,
             Owner: owner,
             AppraisedValue: appraisedValue,
-            rank: rank
+            Rank: rank
         };
         // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(updatedAsset))));

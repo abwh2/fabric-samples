@@ -41,12 +41,12 @@ function createOrg1() {
 
   infoln "Registering peer0"
   set -x
-  fabric-ca-client register --caname ca-org1 --id.name peer0 --id.secret peer0pw --id.type peer --id.attrs 'rank=10' --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
+  fabric-ca-client register --caname ca-org1 --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   infoln "Registering user"
   set -x
-  fabric-ca-client register --caname ca-org1 --id.name user1 --id.secret user1pw --id.type client --id.attrs 'rank=10' --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
+  fabric-ca-client register --caname ca-org1 --id.name user1 --id.secret user1pw --id.type client  --id.attrs 'rank=10:ecert' --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   infoln "Registering the org admin"
@@ -132,7 +132,7 @@ function createOrg2() {
 
   infoln "Registering user"
   set -x
-  fabric-ca-client register --caname ca-org2 --id.name user1 --id.secret user1pw --id.type client --tls.certfiles "${PWD}/organizations/fabric-ca/org2/ca-cert.pem"
+  fabric-ca-client register --caname ca-org2 --id.name user1 --id.secret user1pw --id.type client --id.attrs 'rank=20:ecert' --tls.certfiles "${PWD}/organizations/fabric-ca/org2/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   infoln "Registering the org admin"
