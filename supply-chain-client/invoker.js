@@ -83,7 +83,7 @@ class FabricSampleService {
 
 	async add_fabric(fabric) {
 		console.log('\n--> Submit Transaction: CreateAsset, creates new asset with ID, color, owner, size, and appraisedValue arguments');
-		let result = await this.contract.submitTransaction('CreateAsset', fabric.ID, fabric.Color, fabric.Size, fabric.Owner, fabric.AppraisedValue);
+		let result = await this.contract.submitTransaction('CreateAsset', fabric.ID, fabric.Color, fabric.Size, fabric.Owner, fabric.AppraisedValue, fabric.Rank);
 		console.log('*** Result: committed');
 		if (`${result}` !== '') {
 			console.log(`*** Result: ${prettyJSONString(result.toString())}`);

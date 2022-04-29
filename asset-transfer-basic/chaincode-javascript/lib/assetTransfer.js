@@ -78,21 +78,27 @@ class AssetTransfer extends Contract {
     }
 
     // CreateAsset issues a new asset to the world state with given details.
-    async CreateAsset(ctx, id, color, size, owner, appraisedValue) {
+    async CreateAsset(ctx, id, color, size, owner, appraisedValue, rankAsset) {
         const exists = await this.AssetExists(ctx, id);
         if (exists) {
             throw new Error(`The asset ${id} already exists`);
         }
-        // Retrieve the client rank from the ctx
-        let rank  = ctx.clientIdentity.getAttributeValue('rank')
-        console.log("Rank = "+ rank)
+       // Retrieve the client rank from the ctx
+       let rankOrg  = ctx.clientIdentity.getAttributeValue('rank')
+       console.log("Rank = "+ rankOrg)
+       const rankOrgi = parseInt(rankOrg)
+       const rankAsseti = parseInt(rankAsset)
+       //Verify if the asset rank is less than or equal to the org rank
+       if (rankAsseti > rankOrgi) {
+         rankAsset = rankOrgi;
+        } 
         const asset = {
             ID: id,
             Color: color,
             Size: size,
             Owner: owner,
             AppraisedValue: appraisedValue,
-            Rank: rank
+            Rank: rankAsset
         };
         //we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         
