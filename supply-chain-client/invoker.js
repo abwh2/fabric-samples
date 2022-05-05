@@ -95,7 +95,7 @@ class FabricSampleService {
 
 	async change_owner(id, newowner) {
 		console.log('\n--> Submit Transaction: TransferAsset asset1, transfer to new owner of Tom');
-		let result = await this.contract.submitTransaction('TransferAsset', id, newowner);
+		let result = await this.contract.submitTransaction('TransferAsset', id, newowner,rank);
 		console.log(result.toString())
 		return {}
 	}

@@ -154,14 +154,27 @@ class AssetTransfer extends Contract {
     }
 
     // TransferAsset updates the owner field of asset with given id in the world state.
-    async TransferAsset(ctx, id, newOwner) {
+    async TransferAsset(ctx, id, newOwner,rankAsset) {
         const assetString = await this.ReadAsset(ctx, id);
+        //let rankOrg  = ctx.clientIdentity.getAttributeValue('rank')
         const asset = JSON.parse(assetString);
+        const rankOrg = asset.Rank;
+        console.log("Rank = "+ rankOrg)
+        const rankOrgi = parseInt(rankOrg)
+        const rankAsseti = parseInt(rankAsset)
+        //Verify if the asset rank is less than or equal to the org rank
+        if (rankAsseti > rankOrgi) {
+         rankAsset = rankOrgi;
+        } 
+        //const asset = JSON.parse(assetString);
         const oldOwner = asset.Owner;
         asset.Owner = newOwner;
+        const oldRank = asset.Rank;
+        asset.Rank = rankAsset;
         // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
-        ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
-        return oldOwner;
+        await ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
+        //return oldOwner;
+        return JSON.stringify(asset);
     }
 
     // GetAllAssets returns all assets found in the world state.
